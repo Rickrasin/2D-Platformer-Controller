@@ -29,8 +29,7 @@ public class E1_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        Debug.Log("Wall: "+ isDetectingWall);
-        Debug.Log("Ledge: " + isDetectingLedge);
+        
 
 
         if (IsPlayerMinAgroRange)

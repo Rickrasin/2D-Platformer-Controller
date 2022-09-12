@@ -24,6 +24,11 @@ public class State
     {
         startTime = Time.time;
         entity.anim.SetBool(animBoolName, true);
+
+        if (entity.debugStateName)
+        {
+            Debug.Log(entity.gameObject.name + ": " + animBoolName);
+        }
         DoChecks();
     }
 

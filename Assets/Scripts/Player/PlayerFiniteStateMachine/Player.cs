@@ -44,7 +44,6 @@ public class Player : MonoBehaviour
     public Core Core { get; private set; }
     public Animator Anim { get; private set; }
 
-    
     public PlayerInputHandler InputHandler { get; private set; }
 
     public Rigidbody2D RB { get; private set; }
@@ -58,13 +57,14 @@ public class Player : MonoBehaviour
 
     public SquashStretchController SquashStretch { get; private set; }
     public PlayerInventory Inventory { get; private set;}
+
     #endregion
 
-    
+
 
     #region Other Variables
 
-
+    public bool debugStateName;
 
     private Vector2 workspace;
 
@@ -119,17 +119,25 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        
+
+
 
         //PrimaryAttackState.ResetAttackCount();
         //SecondaryAttackState.ResetAttackCount();
 
         Core.LogicUpdate();
         StateMachine.CurrentState.LogicUpdate();
+
+
+        //TODO: Remover
+
+
+
     }
 
     private void FixedUpdate()
     {
+
         StateMachine.CurrentState.PhysicsUpdate();
     }
 

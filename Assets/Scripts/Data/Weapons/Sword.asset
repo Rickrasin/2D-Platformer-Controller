@@ -16,9 +16,15 @@ MonoBehaviour:
   - attackName: Left attack 1
     movementSpeed: 3
     damageAmount: 1
+    knockbackStrength: 10
+    knockbackAngle: {x: 1, y: 1}
   - attackName: Right attack 2
     movementSpeed: 4
     damageAmount: 15
+    knockbackStrength: 15
+    knockbackAngle: {x: 1, y: 1}
   - attackName: Up attack 3
     movementSpeed: 2
     damageAmount: 20
+    knockbackStrength: 20
+    knockbackAngle: {x: 1, y: 2}

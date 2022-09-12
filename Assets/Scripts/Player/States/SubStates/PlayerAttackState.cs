@@ -18,16 +18,16 @@ public class PlayerAttackState : PlayerAbilityState
     {
     }
 
-    public override void DoCheck()
+    public override void DoChecks()
     {
-        base.DoCheck();
+        base.DoChecks();
     }
     public override void Enter()
     {
         base.Enter();
 
 
-        core.Movement.SetVelocityZero();
+        Movement?.SetVelocityZero();
         setVelocity = false;
 
         weapon.EnterWeapon();
@@ -44,29 +44,30 @@ public class PlayerAttackState : PlayerAbilityState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-    
+
         xInput = player.InputHandler.NormInputX;
 
-        if (shouldCheckFlip) { 
-        core.Movement.CheckIfShouldFlip(xInput);
+        if (shouldCheckFlip)
+        {
+            Movement?.CheckIfShouldFlip(xInput);
         }
         if (setVelocity)
         {
-            core.Movement.SetVelocityX(velocityToSet * player.Core.Movement.FacingDirection);
+            Movement?.SetVelocityX(velocityToSet * Movement.FacingDirection);
         }
     }
 
     public void SetWeapon(Weapon weapon)
     {
         this.weapon = weapon;
-        weapon.InitializeWeapon(this);
+        weapon.InitializeWeapon(this, core);
     }
 
     public void SetPlayerVelocity(float velocity)
     {
-        core.Movement.SetVelocityX(velocity * player.Core.Movement.FacingDirection);
+        Movement?.SetVelocityX(velocity * Movement.FacingDirection);
 
-        
+
 
         velocityToSet = velocity;
         setVelocity = true;
@@ -90,7 +91,7 @@ public class PlayerAttackState : PlayerAbilityState
         }
     }
 
-    
+
 
 
 

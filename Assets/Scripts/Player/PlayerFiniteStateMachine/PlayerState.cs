@@ -29,12 +29,16 @@ public class PlayerState
 
     public virtual void Enter() 
     {
-        DoCheck();
+        DoChecks();
         player.Anim.SetBool(animBoolName, true);
         startTime = Time.time;
-        Debug.Log(animBoolName);
         isAnimationFinished = false;
         isExitingState = false;
+
+        if (player.debugStateName)
+        {
+            Debug.Log(player.gameObject.name + ": " + animBoolName);
+        }
     }
 
     public virtual void Exit()
@@ -51,11 +55,11 @@ public class PlayerState
 
     public virtual void PhysicsUpdate()
     {
-        DoCheck();
+        DoChecks();
 
     }
 
-    public virtual void DoCheck()
+    public virtual void DoChecks()
     {
 
     }

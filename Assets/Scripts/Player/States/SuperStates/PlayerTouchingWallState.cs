@@ -5,6 +5,13 @@ using UnityEngine;
 public class PlayerTouchingWallState : PlayerState
 {
 
+
+    protected Movement Movement { get =>movement ?? core.GetCoreComponent(ref movement); }
+    private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+
+    private Movement movement;
+    private CollisionSenses collisionSenses;
+
     protected bool isGrounded;
     protected bool isTouchingWall;
     protected bool grabInput;
@@ -30,16 +37,17 @@ public class PlayerTouchingWallState : PlayerState
         base.AnimationTrigger();
     }
 
-    public override void DoCheck()
+    public override void DoChecks()
     {
-        base.DoCheck();
+        base.DoChecks();
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+            isTouchingWall = CollisionSenses.WallFront;
 
-        isGrounded = core.CollisionSenses.Ground;
-        isTouchingWall = core.CollisionSenses.WallFront;
-
-        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
-
-        if(isTouchingWall && !isTouchingLedge)
+            isTouchingLedge = CollisionSenses.LedgeHorizontal;
+        }
+        if (isTouchingWall && !isTouchingLedge)
         {
             player.LedgeClimbState.SetDetectedPosition(player.transform.position);
         }
@@ -73,11 +81,11 @@ public class PlayerTouchingWallState : PlayerState
         {
             stateMachine.ChangeState(player.IdleState);
         }
-        else if (!isTouchingWall || (xInput != player.Core.Movement.FacingDirection && !grabInput))
+        else if (!isTouchingWall || (xInput != Movement.FacingDirection && !grabInput))
         {
             stateMachine.ChangeState(player.InAirState);
         }
-        else if(isTouchingWall && !isTouchingLedge)
+        else if (isTouchingWall && !isTouchingLedge)
         {
             stateMachine.ChangeState(player.LedgeClimbState);
         }

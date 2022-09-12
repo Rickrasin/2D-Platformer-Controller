@@ -5,18 +5,22 @@ using System.Linq;
 
 public class AggressiveWeapon : Weapon
 {
+
+
     protected SO_AggressiveWeaponData agressiveWeaponData;
 
-    private List<IDamageable> detectedDamageable = new List<IDamageable>();
+    private List<IDamageable> detectedDamageables = new List<IDamageable>();
+    private List<IKnockbackable> detectedKnockbackables = new List<IKnockbackable>();
+
 
 
     protected override void Awake()
     {
         base.Awake();
 
-        if(weaponData.GetType() == typeof(SO_AggressiveWeaponData))
+        if (weaponData.GetType() == typeof(SO_AggressiveWeaponData))
         {
-            agressiveWeaponData = (SO_AggressiveWeaponData)weaponData; 
+            agressiveWeaponData = (SO_AggressiveWeaponData)weaponData;
         }
         else
         {
@@ -35,9 +39,15 @@ public class AggressiveWeapon : Weapon
     {
         WeaponAttackDetails details = agressiveWeaponData.AttackDetails[attackCounter];
 
-        foreach (IDamageable item in detectedDamageable.ToList())
+        foreach (IDamageable item in detectedDamageables.ToList())
         {
             item.Damage(details.damageAmount);
+        }
+
+        foreach (IKnockbackable item in detectedKnockbackables.ToList())
+
+        {
+            item.Knockback(details.knockbackAngle, details.knockbackStrength, Movement.FacingDirection);
         }
     }
 
@@ -47,11 +57,19 @@ public class AggressiveWeapon : Weapon
 
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if(damageable != null)
+        if (damageable != null)
         {
 
-            detectedDamageable.Add(damageable);
+            detectedDamageables.Add(damageable);
         }
+
+        IKnockbackable knockbackable = collision.GetComponent<IKnockbackable>();
+
+        if (knockbackable != null)
+        {
+            detectedKnockbackables.Add(knockbackable);
+        }
+
     }
 
     public void RemoveFromDetected(Collider2D collision)
@@ -64,7 +82,14 @@ public class AggressiveWeapon : Weapon
         {
 
 
-            detectedDamageable.Remove(damageable);
+            detectedDamageables.Remove(damageable);
+        }
+
+        IKnockbackable knockbackable = collision.GetComponent<IKnockbackable>();
+
+        if (knockbackable != null)
+        {
+            detectedKnockbackables.Remove(knockbackable);
         }
     }
 }

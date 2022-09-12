@@ -8,15 +8,15 @@ public class PlayerMoveState : PlayerGroundedState
     {
     }
 
-    public override void DoCheck()
+    public override void DoChecks()
     {
-        base.DoCheck();
+        base.DoChecks();
     }
 
     public override void Enter()
     {
         base.Enter();
-        core.Movement.SetVelocityX(0f);
+        Movement.SetVelocityX(0f);
     }
 
     public override void Exit()
@@ -28,16 +28,18 @@ public class PlayerMoveState : PlayerGroundedState
     {
         base.LogicUpdate();
 
-        core.Movement.CheckIfShouldFlip(xInput);
+        Movement?.CheckIfShouldFlip(xInput);
 
-        core.Movement.SetVelocityX(playerData.movementVelocity * xInput);
+        Movement?.SetVelocityX(playerData.movementVelocity * xInput);
 
 
-        if(!isExitingState) { 
-            if(xInput == 0)
+        if (!isExitingState)
+        {
+            if (xInput == 0)
             {
                 stateMachine.ChangeState(player.IdleState);
-            }else if(yInput == -1)
+            }
+            else if (yInput == -1)
             {
                 stateMachine.ChangeState(player.CrouchMoveState);
             }

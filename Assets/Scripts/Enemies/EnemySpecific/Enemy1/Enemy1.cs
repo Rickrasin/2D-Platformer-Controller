@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Enemy1 : Entity
 {
+
+    private CollisionSenses CollisionSenses { get => collisionSenses ?? Core.GetCoreComponent(ref collisionSenses); }
+
+    private CollisionSenses collisionSenses;
+
+
     public E1_IdleState idleState { get; private set; }
     public E1_MoveState moveState { get; private set; }
 
@@ -20,6 +26,8 @@ public class Enemy1 : Entity
     public E1_DeadState deadState { get; private set; }
 
 
+    #region Other Variables
+    #endregion
 
     [SerializeField]
     private D_IdleState idleStateData;
@@ -71,28 +79,13 @@ public class Enemy1 : Entity
     {
         base.OnDrawGizmos();
 
-       Gizmos.color = Color.white;
-       //Gizmos.DrawWireSphere(meleeAttackPosition.position, meleeAttackStateData.attackRadius);
+        
+
+
     }
 
-    public override void Damage(AttackDetails attackDetails)
-    {
-        base.Damage(attackDetails);
-
-        if (isDead)
-        {
-            stateMachine.ChangeState(deadState);
-        }
-        else if (isStunned && stateMachine.currentState != stunState)
-        {
-            stateMachine.ChangeState(stunState);
-        }
-        else if (!CheckPlayerInMinAgroRange())
-        {
-            lookForPlayerState.SetTurnImmediately(true);
-            stateMachine.ChangeState(lookForPlayerState);
-        }
+    
 
         
     }
-}
+

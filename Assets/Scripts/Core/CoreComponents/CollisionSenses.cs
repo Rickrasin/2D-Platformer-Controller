@@ -4,141 +4,84 @@ using UnityEngine;
 
 public class CollisionSenses : CoreComponent
 {
+	private Movement Movement { get =>movement ?? core.GetCoreComponent(ref movement); }
 
-    #region checkTransforms
+	private Movement movement;
 
-    public Transform GroundCheck 
-    { 
-        get
-        {
-            if (groundCheck) { 
-                return groundCheck;
-            }else { 
-            Debug.LogError("No Ground Check on " + Core.transform.parent.name);
-            return null;
-            }
-        }
+	#region Check Transforms
 
-        private set => groundCheck = value; }
-
-    public Transform WallCheck
-    {
-        get
-        {
-            if (wallCheck)
-            {
-                return wallCheck;
-            }else { 
-            Debug.LogError("No Wall Check on " + Core.transform.parent.name);
-            return null;
-            }
-        }
-
-        private set => wallCheck = value;
-    }
-
-    public Transform LedgeCheckHorizontal
-    {
-        get
-        {
-            if (ledgeCheckHorizontal)
-            {
-                return ledgeCheckHorizontal;
-            }
-            else
-            {
-                Debug.LogError("No Ledge Check Horizontal on " + Core.transform.parent.name);
-                return null;
-            }
-        }
-
-        private set => ledgeCheckHorizontal = value;
-    }
-
-    public Transform LedgeCheckVertical
-    {
-        get
-        {
-            if (ledgeCheckVertical)
-            {
-                return ledgeCheckVertical;
-            }
-            else
-            {
-                Debug.LogError("No Ledge Check Vertical on " + Core.transform.parent.name);
-                return null;
-            }
-        }
-
-        private set => ledgeCheckVertical = value;
-    }
-    public Transform CeilingCheck
-    {
-        get
-        {
-            if (ceilingCheck)
-            {
-                return ceilingCheck;
-            }
-            else
-            {
-                Debug.LogError("No Ceiling Check on " + Core.transform.parent.name);
-                return null;
-            }
-        }
-
-        private set => ceilingCheck = value;
-    }
-    public float GroundCheckRadius { get => groundCheckRadius; set => groundCheckRadius = value; }
-    public float WallCheckDistance { get => wallCheckDistance; set => wallCheckDistance = value; }
-    public float LedgeCheckDistance { get => ledgeCheckDistance; set => ledgeCheckDistance = value; }
-
-    public LayerMask WhatIsGround { get => whatIsGround; set => whatIsGround = value; }
-
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private Transform ledgeCheckHorizontal;
-    [SerializeField] private Transform ledgeCheckVertical;
-    [SerializeField] private Transform ceilingCheck;
-
-    [SerializeField] private float groundCheckRadius;
-    [SerializeField] private float wallCheckDistance;
-    [SerializeField] private float ledgeCheckDistance;
+	public Transform GroundCheck
+	{
+		get => GenericNotImplementedError<Transform>.TryGet(groundCheck, core.transform.parent.name);
+		private set => groundCheck = value;
+	}
+	public Transform WallCheck
+	{
+		get => GenericNotImplementedError<Transform>.TryGet(wallCheck, core.transform.parent.name);
+		private set => wallCheck = value;
+	}
+	public Transform LedgeCheckHorizontal
+	{
+		get => GenericNotImplementedError<Transform>.TryGet(ledgeCheckHorizontal, core.transform.parent.name);
+		private set => ledgeCheckHorizontal = value;
+	}
+	public Transform LedgeCheckVertical
+	{
+		get => GenericNotImplementedError<Transform>.TryGet(ledgeCheckVertical, core.transform.parent.name);
+		private set => ledgeCheckVertical = value;
+	}
+	public Transform CeilingCheck
+	{
+		get => GenericNotImplementedError<Transform>.TryGet(ceilingCheck, core.transform.parent.name);
+		private set => ceilingCheck = value;
+	}
+	public float GroundCheckRadius { get => groundCheckRadius; set => groundCheckRadius = value; }
+	public float WallCheckDistance { get => wallCheckDistance; set => wallCheckDistance = value; }
+	public LayerMask WhatIsGround { get => whatIsGround; set => whatIsGround = value; }
 
 
+	[SerializeField] private Transform groundCheck;
+	[SerializeField] private Transform wallCheck;
+	[SerializeField] private Transform ledgeCheckHorizontal;
+	[SerializeField] private Transform ledgeCheckVertical;
+	[SerializeField] private Transform ceilingCheck;
 
-    [SerializeField] private LayerMask whatIsGround; 
-    #endregion
-
-    public bool Ceiling
-    {
-        get => Physics2D.OverlapCircle(CeilingCheck.position, groundCheckRadius, whatIsGround);
-    }
-
-    public bool Ground
-    {
-        get => Physics2D.OverlapCircle(GroundCheck.position, groundCheckRadius, whatIsGround);
-    }
-
-    public bool WallFront
-    {
-        get => Physics2D.Raycast(WallCheck.position, Vector2.right * Core.Movement.FacingDirection, wallCheckDistance, whatIsGround);
-    }
+	[SerializeField] private float groundCheckRadius;
+	[SerializeField] private float wallCheckDistance;
+	[SerializeField] private float ledgeCheckVerticalDistance;
 
 
-    public bool WallBack
-    {
-        get => Physics2D.Raycast(WallCheck.position, Vector2.right * -Core.Movement.FacingDirection, wallCheckDistance, whatIsGround);
-    }
+	[SerializeField] private LayerMask whatIsGround;
 
-    public bool LedgeVertical
-    {
-        get => Physics2D.Raycast(LedgeCheckVertical.position, Vector2.down, ledgeCheckDistance, whatIsGround);
-    }
+	#endregion
 
-    public bool LedgeHorizontal
-    {
-        get => Physics2D.Raycast(LedgeCheckHorizontal.position, Vector2.right * Core.Movement.FacingDirection, ledgeCheckDistance, whatIsGround);
-    }
-   
+	public bool Ceiling
+	{
+		get => Physics2D.OverlapCircle(CeilingCheck.position, groundCheckRadius, whatIsGround);
+	}
+
+	public bool Ground
+	{
+		get => Physics2D.OverlapCircle(GroundCheck.position, groundCheckRadius, whatIsGround);
+	}
+
+	public bool WallFront
+	{
+		get => Physics2D.Raycast(WallCheck.position, Vector2.right * Movement.FacingDirection, wallCheckDistance, whatIsGround);
+	}
+
+	public bool LedgeHorizontal
+	{
+		get => Physics2D.Raycast(LedgeCheckHorizontal.position, Vector2.right * Movement.FacingDirection, wallCheckDistance, whatIsGround);
+	}
+
+	public bool LedgeVertical
+	{
+		get => Physics2D.Raycast(LedgeCheckVertical.position, Vector2.down, ledgeCheckVerticalDistance, whatIsGround);
+	}
+
+	public bool WallBack
+	{
+		get => Physics2D.Raycast(WallCheck.position, Vector2.right * -Movement.FacingDirection, wallCheckDistance, whatIsGround);
+	}
 }

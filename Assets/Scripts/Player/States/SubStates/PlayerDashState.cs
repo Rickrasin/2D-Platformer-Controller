@@ -26,7 +26,7 @@ public class PlayerDashState : PlayerAbilityState
         player.InputHandler.UseDashInput();
 
         isHolding = true;
-        dashDirection = Vector2.right * player.Core.Movement.FacingDirection;
+        dashDirection = Vector2.right * Movement.FacingDirection;
 
         Time.timeScale = playerData.holdTimeScale;
         startTime = Time.unscaledTime;
@@ -37,9 +37,9 @@ public class PlayerDashState : PlayerAbilityState
     public override void Exit()
     {
         base.Exit();
-        if (core.Movement.CurrentVelocity.y > 0)
+        if (Movement?.CurrentVelocity.y > 0)
         {
-            core.Movement.SetVelocityY(core.Movement.CurrentVelocity.y * playerData.dashEndYMultiplier);
+            Movement?.SetVelocityY(Movement.CurrentVelocity.y * playerData.dashEndYMultiplier);
         }
     }
 
@@ -47,11 +47,11 @@ public class PlayerDashState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        if(!isExitingState)
+        if (!isExitingState)
         {
 
-            player.Anim.SetFloat("yVelocity", core.Movement.CurrentVelocity.y);
-            player.Anim.SetFloat("xVelocity", Mathf.Abs(core.Movement.CurrentVelocity.x));
+            player.Anim.SetFloat("yVelocity", Movement.CurrentVelocity.y);
+            player.Anim.SetFloat("xVelocity", Mathf.Abs(Movement.CurrentVelocity.x));
 
             if (isHolding)
             {
@@ -67,14 +67,14 @@ public class PlayerDashState : PlayerAbilityState
                 float angle = Vector2.SignedAngle(Vector2.right, dashDirection);
                 player.DashDirecitonIndicator.rotation = Quaternion.Euler(0f, 0f, angle - 45f);
 
-                if(dashInputStop || Time.unscaledTime >= startTime + playerData.maxHoldTime)
+                if (dashInputStop || Time.unscaledTime >= startTime + playerData.maxHoldTime)
                 {
                     isHolding = false;
                     Time.timeScale = 1f;
                     startTime = Time.time;
-                    core.Movement.CheckIfShouldFlip(Mathf.RoundToInt(dashDirection.x));
+                    Movement?.CheckIfShouldFlip(Mathf.RoundToInt(dashDirection.x));
                     player.RB.drag = playerData.drag;
-                    core.Movement.SetVelocity(playerData.dashVelocity, dashDirection);
+                    Movement?.SetVelocity(playerData.dashVelocity, dashDirection);
                     player.DashDirecitonIndicator.gameObject.SetActive(false);
 
 
@@ -82,9 +82,9 @@ public class PlayerDashState : PlayerAbilityState
             }
             else
             {
-                core.Movement.SetVelocity(playerData.dashVelocity, dashDirection);
+                Movement?.SetVelocity(playerData.dashVelocity, dashDirection);
 
-                if(Time.time >= startTime + playerData.dashTime)
+                if (Time.time >= startTime + playerData.dashTime)
                 {
                     player.RB.drag = 0f;
                     isAbilityDone = true;
@@ -94,9 +94,9 @@ public class PlayerDashState : PlayerAbilityState
         }
     }
 
-    
 
-    
+
+
 
     public bool CheckifCanDash()
     {

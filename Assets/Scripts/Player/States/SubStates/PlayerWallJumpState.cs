@@ -14,15 +14,15 @@ public class PlayerWallJumpState : PlayerAbilityState
     {
         base.Enter();
 
-        core.Movement.SetVelocityY(0f);
-        core.Movement.SetVelocityX(0f);
+        Movement?.SetVelocityY(0f);
+        Movement?.SetVelocityX(0f);
 
 
 
         player.InputHandler.UseJumpInput();
         player.JumpState.ResetAmountOfJumpLeft();
-        core.Movement.SetVelocity(playerData.wallJumpVelocity, playerData.wallJumpAngle, wallJumpDirection);
-        core.Movement.CheckIfShouldFlip(wallJumpDirection);
+        Movement?.SetVelocity(playerData.wallJumpVelocity, playerData.wallJumpAngle, wallJumpDirection);
+        Movement?.CheckIfShouldFlip(wallJumpDirection);
         player.JumpState.DecreaseAmountOfJumpsLeft();
     }
 
@@ -31,11 +31,11 @@ public class PlayerWallJumpState : PlayerAbilityState
         base.LogicUpdate();
 
 
-        player.Anim.SetFloat("yVelocity", core.Movement.CurrentVelocity.y);
-        player.Anim.SetFloat("xVelocity", Mathf.Abs(core.Movement.CurrentVelocity.x));
+        player.Anim.SetFloat("yVelocity", Movement.CurrentVelocity.y);
+        player.Anim.SetFloat("xVelocity", Mathf.Abs(Movement.CurrentVelocity.x));
 
 
-        if(Time.time >= startTime + playerData.wallJumpTime)
+        if (Time.time >= startTime + playerData.wallJumpTime)
         {
             isAbilityDone = true;
         }
@@ -44,13 +44,14 @@ public class PlayerWallJumpState : PlayerAbilityState
 
     public void DetermineWallJumpDirection(bool isTouchingWall)
     {
-        if(isTouchingWall)
+        if (isTouchingWall)
         {
-            wallJumpDirection = -player.Core.Movement.FacingDirection;
+            wallJumpDirection = -Movement.FacingDirection;
 
-        }else
+        }
+        else
         {
-            wallJumpDirection = player.Core.Movement.FacingDirection;
+            wallJumpDirection = Movement.FacingDirection;
         }
     }
 }

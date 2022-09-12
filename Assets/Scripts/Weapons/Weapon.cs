@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    
+
+    protected Movement Movement { get =>movement ?? core.GetCoreComponent(ref movement); }
+    private Movement movement;
+
+
     [SerializeField] protected SO_WeaponData weaponData;
 
     protected float startTime;
@@ -14,6 +18,8 @@ public class Weapon : MonoBehaviour
     protected Animator weaponAnimator;
 
     protected PlayerAttackState state;
+
+    protected Core core;
 
     protected int attackCounter;
     protected bool canReset;
@@ -30,7 +36,7 @@ public class Weapon : MonoBehaviour
     public virtual void EnterWeapon()
     {
         gameObject.SetActive(true);
-        
+
 
 
         if (attackCounter >= weaponData.amountOfAttacks)
@@ -46,16 +52,20 @@ public class Weapon : MonoBehaviour
         if (attackCounter > 0)
         {
             canReset = true;
-        } else if(attackCounter == 1)
+        }
+        else if (attackCounter == 1)
         {
             canReset = true;
-        }else if(attackCounter < 2)
+        }
+        else if (attackCounter < 2)
         {
             canReset = true;
-        } else if(attackCounter == 0)
+        }
+        else if (attackCounter == 0)
         {
             canReset = false;
-        } else if(attackCounter == 2)
+        }
+        else if (attackCounter == 2)
         {
             canReset = false;
         }
@@ -70,7 +80,7 @@ public class Weapon : MonoBehaviour
 
     }
 
-    
+
 
     public virtual void ExitWeapon()
     {
@@ -89,7 +99,7 @@ public class Weapon : MonoBehaviour
     public virtual void AnimationFinishTrigger()
     {
         state.AnimationFinishTrigger();
-        
+
 
     }
 
@@ -126,8 +136,9 @@ public class Weapon : MonoBehaviour
 
 
 
-    public void InitializeWeapon(PlayerAttackState state)
+    public void InitializeWeapon(PlayerAttackState state, Core core)
     {
         this.state = state;
+        this.core = core;
     }
 }

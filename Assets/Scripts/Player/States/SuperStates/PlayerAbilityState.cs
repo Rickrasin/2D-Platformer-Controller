@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class PlayerAbilityState : PlayerState
 {
-
     protected bool isAbilityDone;
+
+    protected Movement Movement { get =>movement ?? core.GetCoreComponent(ref movement); }
+    private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+
+    private Movement movement;
+    private CollisionSenses collisionSenses;
 
     private bool isGrounded;
 
@@ -13,12 +18,14 @@ public class PlayerAbilityState : PlayerState
     {
     }
 
-    public override void DoCheck()
+    public override void DoChecks()
     {
-        base.DoCheck();
-        isGrounded = core.CollisionSenses.Ground;
+        base.DoChecks();
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+        }
     }
-
     public override void Enter()
     {
         base.Enter();
@@ -36,16 +43,17 @@ public class PlayerAbilityState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-       
+
         if (isAbilityDone)
         {
-            
-            if (isGrounded && core.Movement.CurrentVelocity.y < 0.01f)
+
+            if (isGrounded && Movement?.CurrentVelocity.y < 0.01f)
             {
                 player.SquashStretch.setLandSquashStretch(false);
 
                 stateMachine.ChangeState(player.IdleState);
-            } else
+            }
+            else
             {
                 player.SquashStretch.setLandSquashStretch(false);
 

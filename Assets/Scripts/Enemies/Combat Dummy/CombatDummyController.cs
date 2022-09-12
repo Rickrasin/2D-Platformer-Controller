@@ -51,45 +51,7 @@ public class CombatDummyController : MonoBehaviour
         CheckKnockback();
     }
 
-    private void Damage(AttackDetails details)
-    {
-        currentHealth -= details.damageAmount;
-
-        if (details.position.x < aliveGo.transform.position.x)
-        {
-            FacingDirection = 1;
-        }
-        else
-        {
-            FacingDirection = -1;
-        }
-
-        Instantiate(hitParticle, aliveAnim.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
-
-        if (FacingDirection == 1)
-        {
-            playerOnLeft = true;
-        }
-        else
-        {
-            playerOnLeft = false;
-        }
-
-        aliveAnim.SetBool("playerOnLeft", playerOnLeft);
-        aliveAnim.SetTrigger("damage");
-
-        if (applyKnockback && currentHealth > 0.0f)
-        {
-            //Knockback
-            Knockback();
-        }
-
-        if (currentHealth <= 0.0f)
-        {
-            //Die
-            Die();
-        }
-    }
+   
 
     private void Knockback()
     {

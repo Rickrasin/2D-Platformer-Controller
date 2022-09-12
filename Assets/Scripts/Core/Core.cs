@@ -1,56 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Core : MonoBehaviour
 {
-    public Movement Movement
-    {
-        get
-        {
-            if(movement)
-            {
-            return movement;
-            }
+	private readonly List<CoreComponent> CoreComponents = new List<CoreComponent>();
 
-            Debug.Log("No Movement Core Component on " + transform.parent.name);
-            return null;
-        }
+	private void Awake()
+	{
 
-        private set{ movement = value; }
+	}
 
-    }
+	public void LogicUpdate()
+	{
+		foreach (CoreComponent component in CoreComponents)
+		{
+			component.LogicUpdate();
+		}
+	}
 
-    public CollisionSenses CollisionSenses
-    {
-        get
-        {
-            if (collisionSenses != null)
-            {
-                return collisionSenses;
-            }
+	public void AddComponent(CoreComponent component)
+	{
+		if (!CoreComponents.Contains(component))
+		{
+			CoreComponents.Add(component);
+		}
+	}
 
-            Debug.Log("No Collision Senses Core Component on " + transform.parent.name);
-            return null;
-        }
+	public T GetCoreComponent<T>() where T : CoreComponent
+	{
+		var comp = CoreComponents.OfType<T>().FirstOrDefault();
 
-        private set { collisionSenses = value; }
-    }
-    private Movement movement;
-    private CollisionSenses collisionSenses;
+		if (comp == null)
+		{
+			Debug.LogWarning($"{typeof(T)} not found on {transform.parent.name}");
+		}
 
+		return comp;
+	}
 
-    private void Awake()
-    {
-        Movement = GetComponentInChildren<Movement>();
-        CollisionSenses = GetComponentInChildren<CollisionSenses>();
-
-        
-    }
-
-
-    public void LogicUpdate()
-    {
-        Movement.LogicUpdate();
-    }
+	public T GetCoreComponent<T>(ref T value) where T : CoreComponent
+	{
+		value = GetCoreComponent<T>();
+		return value;
+	}
 }

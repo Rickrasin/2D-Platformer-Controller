@@ -8,15 +8,15 @@ public class PlayerIdleState : PlayerGroundedState
     {
     }
 
-    public override void DoCheck()
+    public override void DoChecks()
     {
-        base.DoCheck();
+        base.DoChecks();
     }
 
     public override void Enter()
     {
         base.Enter();
-        core.Movement.SetVelocityZero();
+        Movement?.SetVelocityZero();
     }
 
     public override void Exit()
@@ -32,11 +32,11 @@ public class PlayerIdleState : PlayerGroundedState
         if (!isExitingState)
         {
 
-            if(xInput != 0)
+            if (xInput != 0)
             {
                 stateMachine.ChangeState(player.MoveState);
             }
-            else if(yInput == -1)
+            else if (yInput == -1)
             {
                 stateMachine.ChangeState(player.CrouchIdleState);
             }
